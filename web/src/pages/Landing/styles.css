@@ -50,10 +50,11 @@
 
     display: flex;
     flex-direction: column;
-    justify-content: right;
+    justify-content: center;
+    align-items: flex-end;
 }
 
-#landing-page .content-wrapper .location span {
+#landing-page .content-wrapper .location strong {
     font-size: 700;
 }
 
