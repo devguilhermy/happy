@@ -1,16 +1,12 @@
 import express from "express";
+
 import "./database/connection";
+import routes from "./routes";
 
 const app = express();
 
 app.use(express.json());
 
-app.post("/:id", (req, res) => {
-    return res.json({
-        query_params: req.query,
-        route_params: req.params,
-        body: req.body,
-    });
-});
+app.use(routes);
 
 app.listen(1234);
