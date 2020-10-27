@@ -15,11 +15,11 @@ export class createPlace1603462730738 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "title",
-                        type: "string",
+                        name: "name",
+                        type: "varchar",
                     },
                     {
-                        name: "description",
+                        name: "about",
                         type: "text",
                     },
                     {
@@ -35,8 +35,12 @@ export class createPlace1603462730738 implements MigrationInterface {
                         precision: 2,
                     },
                     {
+                        name: "instructions",
+                        type: "text",
+                    },
+                    {
                         name: "working_hours",
-                        type: "string",
+                        type: "varchar",
                     },
                     {
                         name: "working_weekends",
@@ -48,5 +52,7 @@ export class createPlace1603462730738 implements MigrationInterface {
         );
     }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {}
+    public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropTable("places");
+    }
 }
