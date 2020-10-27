@@ -5,7 +5,6 @@ import "./database/connection";
 const app = express();
 
 app.use(express.json());
-
-app.use("/", router);
+app.use(router);
 
 app.listen(1234);
