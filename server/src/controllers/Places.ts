@@ -57,8 +57,6 @@ export default {
 
     async create(request: Request, response: Response) {
         try {
-            const { files } = request;
-
             const {
                 name,
                 about,
@@ -69,22 +67,19 @@ export default {
                 longitude,
             } = request.body;
 
+            const requestFiles = request.files as Express.Multer.File[];
+            const images = requestFiles.map((file) => {
+                return { path: file.filename };
+            });
+
             const placesRepo = getRepository("places");
-            const imagesRepo = getRepository("images");
 
             const place = await placesRepo.create({
                 ...request.body,
+                images,
             });
 
             await placesRepo.save(place);
-
-            files.forEach((file) => {
-                await imagesRepo.create({
-                    name: file.name,
-                    path: file.path,
-                    place_id: place.id,
-                });
-            });
 
             return response.status(201).json({
                 status: 201,

@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    OneToMany,
+    JoinColumn,
+} from "typeorm";
+import Images from "./Images";
 
 @Entity("places")
 export default class Places {
@@ -25,4 +32,10 @@ export default class Places {
 
     @Column()
     working_weekends: boolean;
+
+    @OneToMany(() => Images, (image) => image.place, {
+        cascade: ["insert", "update", "remove"],
+    })
+    @JoinColumn({ name: "place_id" })
+    images: Images[];
 }
