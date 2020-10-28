@@ -3,8 +3,8 @@ import PlaceController from "../controllers/Places";
 
 const PlaceRouter = express.Router();
 
-PlaceRouter.get("/", PlaceController.fetch);
-PlaceRouter.get("/:id", PlaceController.index);
+PlaceRouter.get("/", PlaceController.index);
+PlaceRouter.get("/:id", PlaceController.show);
 PlaceRouter.post("/", PlaceController.create);
 PlaceRouter.put("/", PlaceController.update);
 PlaceRouter.delete("/", PlaceController.delete);

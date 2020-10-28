@@ -2,12 +2,46 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 
 export default {
-    async fetch(request: Request, response: Response) {
-        return response.json({ message: "Fetched" });
+    async index(request: Request, response: Response) {
+        try {
+            const placesRepo = getRepository("places");
+
+            const places = await placesRepo.find();
+
+            return response.status(200).json({
+                status: 200,
+                message: "Listing places successfully",
+                places,
+            });
+        } catch (error) {
+            return response
+                .status(400)
+                .json({ status: 400, message: "Error", error });
+        }
     },
 
-    async index(request: Request, response: Response) {
-        return response.json({ message: "Fetched index" });
+    async show(request: Request, response: Response) {
+        try {
+            const { id } = request.params;
+
+            if (isNaN(parseInt(id))) {
+                // throw new Exception;
+            }
+
+            const placesRepo = getRepository("places");
+
+            const place = await placesRepo.findOneOrFail(id);
+
+            return response.status(200).json({
+                status: 200,
+                message: "Place fetched successfully",
+                place,
+            });
+        } catch (error) {
+            return response
+                .status(400)
+                .json({ status: 400, message: "Error", error });
+        }
     },
 
     async create(request: Request, response: Response) {
@@ -45,10 +79,10 @@ export default {
     },
 
     async update(request: Request, response: Response) {
-        return response.json({ message: "Updated" });
+        return response.status(202).json({ message: "Updated" });
     },
 
     async delete(request: Request, response: Response) {
-        return response.json({ message: "Deleted" });
+        return response.status(202).json({ message: "Deleted" });
     },
 };
