@@ -1,28 +1,22 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 
-interface Place {
-    id: number;
-    name: string;
-    about: string;
-    instructions: string;
-    working_hours: string;
-    working_weekends: boolean;
-    latitude: number;
-    longitude: number;
-}
+import PlaceModel from "../models/Place";
+import PlaceView from "../views/Place";
 
 export default {
     async index(request: Request, response: Response) {
         try {
-            const placesRepo = getRepository("places");
+            const placesRepo = getRepository(PlaceModel);
 
-            const places = await placesRepo.find();
+            const places = await placesRepo.find({
+                relations: ["images"],
+            });
 
             return response.status(200).json({
                 status: 200,
                 message: "Listing places successfully",
-                places,
+                place: PlaceView.renderMany(places),
             });
         } catch (error) {
             return response
@@ -39,14 +33,16 @@ export default {
                 // throw new Exception;
             }
 
-            const placesRepo = getRepository("places");
+            const placesRepo = getRepository(PlaceModel);
 
-            const place = await placesRepo.findOneOrFail(id);
+            const place = await placesRepo.findOneOrFail(id, {
+                relations: ["images"],
+            });
 
             return response.status(200).json({
                 status: 200,
                 message: "Place fetched successfully",
-                place,
+                place: PlaceView.render(place),
             });
         } catch (error) {
             return response
@@ -72,7 +68,7 @@ export default {
                 return { path: file.filename };
             });
 
-            const placesRepo = getRepository("places");
+            const placesRepo = getRepository(PlaceModel);
 
             const place = await placesRepo.create({
                 ...request.body,

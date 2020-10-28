@@ -5,17 +5,17 @@ import {
     ManyToOne,
     JoinColumn,
 } from "typeorm";
-import Places from "./Places";
+import PlaceModel from "./Place";
 
 @Entity("images")
-export default class Images {
+export default class Image {
     @PrimaryGeneratedColumn("increment")
     id: number;
 
     @Column()
     path: string;
 
-    @ManyToOne(() => Places, (place) => place.images)
+    @ManyToOne(() => PlaceModel, (place) => place.images)
     @JoinColumn({ name: "place_id" })
-    place: Places;
+    place: PlaceModel;
 }

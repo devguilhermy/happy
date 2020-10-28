@@ -5,10 +5,10 @@ import {
     OneToMany,
     JoinColumn,
 } from "typeorm";
-import Images from "./Images";
+import ImageModel from "./Image";
 
 @Entity("places")
-export default class Places {
+export default class Place {
     @PrimaryGeneratedColumn("increment")
     id: number;
 
@@ -33,9 +33,9 @@ export default class Places {
     @Column()
     working_weekends: boolean;
 
-    @OneToMany(() => Images, (image) => image.place, {
+    @OneToMany(() => ImageModel, (image) => image.place, {
         cascade: ["insert", "update", "remove"],
     })
     @JoinColumn({ name: "place_id" })
-    images: Images[];
+    images: ImageModel[];
 }
