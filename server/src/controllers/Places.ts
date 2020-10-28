@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 
@@ -96,6 +99,45 @@ export default {
     },
 
     async delete(request: Request, response: Response) {
-        return response.status(202).json({ message: "Deleted" });
+        try {
+            const { id } = request.params;
+
+            const placesRepo = getRepository(PlaceModel);
+
+            const placeToDelete = await placesRepo.findOneOrFail(id);
+
+            await placeToDelete.images.forEach((image) => {
+                fs.unlink(
+                    path.join(
+                        __dirname,
+                        "..",
+                        "..",
+                        "uploads",
+                        image.path
+                    ),
+                    (error) => {
+                        return response.status(400).json({
+                            status: 400,
+                            message: "Impossible to delete images",
+                            error,
+                        });
+                    }
+                );
+            });
+
+            await placesRepo.remove(placeToDelete);
+
+            return response.status(201).json({
+                status: 201,
+                message: "Place deleted successfully",
+                placeToDelete,
+            });
+        } catch (error) {
+            return response.status(400).json({
+                status: 400,
+                message: "Error",
+                error,
+            });
+        }
     },
 };
