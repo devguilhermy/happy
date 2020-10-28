@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import * as Yup from "yup";
 
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
@@ -55,43 +56,50 @@ export default {
     },
 
     async create(request: Request, response: Response) {
-        try {
-            const {
-                name,
-                about,
-                instructions,
-                working_hours,
-                working_weekends,
-                latitude,
-                longitude,
-            } = request.body;
+        // try {
+        const {
+            name,
+            about,
+            instructions,
+            working_hours,
+            working_weekends,
+            latitude,
+            longitude,
+        } = request.body;
 
-            const requestFiles = request.files as Express.Multer.File[];
-            const images = requestFiles.map((file) => {
-                return { path: file.filename };
-            });
+        const requestFiles = request.files as Express.Multer.File[];
+        const images = requestFiles.map((file) => {
+            return { path: file.filename };
+        });
 
-            const placesRepo = getRepository(PlaceModel);
+        const placesRepo = getRepository(PlaceModel);
 
-            const place = await placesRepo.create({
-                ...request.body,
-                images,
-            });
+        const data = {
+            name,
+            about,
+            instructions,
+            working_hours,
+            working_weekends,
+            latitude,
+            longitude,
+            images,
+        };
 
-            await placesRepo.save(place);
+        const place = await placesRepo.create(data);
+        await placesRepo.save(place);
 
-            return response.status(201).json({
-                status: 201,
-                message: "Place created",
-                place,
-            });
-        } catch (error) {
-            return response.status(400).json({
-                status: 400,
-                message: "Error",
-                error,
-            });
-        }
+        return response.status(201).json({
+            status: 201,
+            message: "Place created",
+            place,
+        });
+        // } catch (error) {
+        //     return response.status(400).json({
+        //         status: 400,
+        //         message: "Error",
+        //         error,
+        //     });
+        // }
     },
 
     async update(request: Request, response: Response) {
