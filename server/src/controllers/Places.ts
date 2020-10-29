@@ -85,7 +85,27 @@ export default {
             images,
         };
 
+        const schema = Yup.object().shape({
+            name: Yup.string().required("Nome é pbrigatório"),
+            latitude: Yup.number().required(),
+            longitude: Yup.number().required(),
+            about: Yup.string().required().max(300),
+            instructions: Yup.string().required(),
+            working_hours: Yup.string().required(),
+            working_weekends: Yup.boolean().required(),
+            images: Yup.array(
+                Yup.object().shape({
+                    path: Yup.string().required(),
+                })
+            ),
+        });
+
+        await schema.validate(data, {
+            abortEarly: false,
+        });
+
         const place = await placesRepo.create(data);
+
         await placesRepo.save(place);
 
         return response.status(201).json({
