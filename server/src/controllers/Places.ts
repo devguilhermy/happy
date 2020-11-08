@@ -67,10 +67,14 @@ export default {
             longitude,
         } = request.body;
 
-        const requestFiles = request.files as Express.Multer.File[];
-        const images = requestFiles.map((file) => {
+        let images: {}[] = [];
+
+        if (request.files) {
+            const requestFiles = request.files as Express.Multer.File[];
+            images = requestFiles.map((file) => {
             return { path: file.filename };
         });
+        }
 
         const placesRepo = getRepository(PlaceModel);
 
