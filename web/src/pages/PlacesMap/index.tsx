@@ -7,6 +7,7 @@ import logoIcon from "../../images/logo-icon.svg";
 
 import "./styles.css";
 import "leaflet/dist/leaflet.css";
+import "dotenv/config"
 
 function PlacesMap() {
     return (
@@ -32,7 +33,7 @@ function PlacesMap() {
             >
                 {/* <TileLayer url="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"></TileLayer> */}
                 <TileLayer
-                    url={`https://api.mapbox.com/styles/v1/mapbox/navigation-guidance-day-v4/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
+                    url={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
                 ></TileLayer>
             </Map>
 
