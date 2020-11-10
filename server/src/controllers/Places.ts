@@ -20,7 +20,7 @@ export default {
             return response.status(200).json({
                 status: 200,
                 message: "Listing places successfully",
-                place: PlaceView.renderMany(places),
+                places: PlaceView.renderMany(places),
             });
         } catch (error) {
             return response
@@ -72,8 +72,8 @@ export default {
         if (request.files) {
             const requestFiles = request.files as Express.Multer.File[];
             images = requestFiles.map((file) => {
-            return { path: file.filename };
-        });
+                return { path: file.filename };
+            });
         }
 
         const placesRepo = getRepository(PlaceModel);
@@ -127,13 +127,18 @@ export default {
     },
 
     async update(request: Request, response: Response) {
-        const {id} = request.params;
+        const { id } = request.params;
 
         const placesRepo = getRepository(PlaceModel);
-        const place = await placesRepo.findOneOrFail(id)
+        const place = await placesRepo.findOneOrFail(id);
 
         if (!place) {
-            return response.status(400).json({ message: "There was an error", error: "There is no place with the identifier provided" });
+            return response
+                .status(400)
+                .json({
+                    message: "There was an error",
+                    error: "There is no place with the identifier provided",
+                });
         }
 
         const {
@@ -192,45 +197,38 @@ export default {
     },
 
     async delete(request: Request, response: Response) {
-            const { id } = request.params;
+        const { id } = request.params;
 
-            const placesRepo = getRepository(PlaceModel);
+        const placesRepo = getRepository(PlaceModel);
 
-            const placeToDelete = await placesRepo.findOneOrFail(id, {relations: ["images"]});
+        const placeToDelete = await placesRepo.findOneOrFail(id, {
+            relations: ["images"],
+        });
 
-            let errorImageDeletion;
+        let errorImageDeletion;
 
-            await placeToDelete.images.forEach((image) => {
-                console.log(image)
-                fs.unlink(
-                    path.join(
-                        __dirname,
-                        "..",
-                        "..",
-                        "uploads",
-                        image.path
-                    ),
-                    (error) => {
-                        errorImageDeletion = error;
-                    }
-                );
+        await placeToDelete.images.forEach((image) => {
+            console.log(image);
+            fs.unlink(
+                path.join(__dirname, "..", "..", "uploads", image.path),
+                (error) => {
+                    errorImageDeletion = error;
+                }
+            );
+        });
+
+        if (errorImageDeletion) {
+            return response.status(400).json({
+                message: "Impossible to delete images",
+                errorImageDeletion,
             });
-
-            if (errorImageDeletion) {
-                return response.status(400).json({
-                    message: "Impossible to delete images",
-                    errorImageDeletion,
-                });
-            } else {
-                
+        } else {
             await placesRepo.remove(placeToDelete);
-            
-                return response.status(201).json({
-                    message: "Place deleted successfully",
-                    placeToDelete,
-                });
-            }
 
-            
+            return response.status(201).json({
+                message: "Place deleted successfully",
+                placeToDelete,
+            });
+        }
     },
 };

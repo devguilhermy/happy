@@ -1,24 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import leaflet from "leaflet";
 
 import { FiArrowRight, FiPlus } from "react-icons/fi";
 import logoIcon from "../../images/logo.svg";
-import mapMarker from "../../images/map-marker.svg";
 
 import "./styles.css";
-import "leaflet/dist/leaflet.css";
-import "dotenv/config";
+import mapMarker from "../../utils/mapMarker";
 
-const mapIcon = leaflet.icon({
-    iconUrl: mapMarker,
-    iconSize: [58, 68],
-    iconAnchor: [29, 68],
-    popupAnchor: [180, 4],
-});
+interface PlaceInterface {
+    name: string;
+    about: string;
+    instructions: string;
+    working_hours: string;
+    working_weekends: boolean;
+    latitude: number;
+    longitude: number;
+    images?: Array<{
+        id: number;
+        url: string;
+    }>;
+}
 
 function PlacesMap() {
+    const [places, setPlaces] = useState([]);
+
+    axios.get("http://localhost:3333/places").then((response) => {
+        setPlaces(response.data.places);
+    });
+
     return (
         <div id="places-map">
             <aside>
@@ -43,19 +54,26 @@ function PlacesMap() {
                     url={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
                 ></TileLayer>
 
-                <Marker icon={mapIcon} position={[-16.6748433, -49.2527972]}>
-                    <Popup
-                        closeButton={false}
-                        minWidth={240}
-                        maxWidth={240}
-                        className="marker-popup"
-                    >
-                        Casa da Esperança
-                        <Link to="/places/1">
-                            <FiArrowRight size={25} color="#FFF" />
-                        </Link>
-                    </Popup>
-                </Marker>
+                {places.map((place: PlaceInterface) => {
+                    return (
+                        <Marker
+                            icon={mapMarker}
+                            position={[place.latitude, place.longitude]}
+                        >
+                            <Popup
+                                closeButton={false}
+                                minWidth={240}
+                                maxWidth={240}
+                                className="marker-popup"
+                            >
+                                {place.name}
+                                <Link to="/places/1">
+                                    <FiArrowRight size={25} color="#FFF" />
+                                </Link>
+                            </Popup>
+                        </Marker>
+                    );
+                })}
             </Map>
 
             <Link to="/places/new" className="add-place">
