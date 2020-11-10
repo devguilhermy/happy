@@ -57,7 +57,7 @@ function PlacesMap() {
                     >
                         Casa da Esperança
                         <Link to="">
-                            <FiArrowRight size={24} color="#FFF" />
+                            <FiArrowRight size={25} color="#FFF" />
                         </Link>
                     </Popup>
                 </Marker>
