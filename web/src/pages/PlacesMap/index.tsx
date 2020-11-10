@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Map, TileLayer, Marker } from "react-leaflet";
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import leaflet from "leaflet";
 
-import { FiPlus } from "react-icons/fi";
+import { FiArrowRight, FiPlus } from "react-icons/fi";
 import logoIcon from "../../images/logo.svg";
 import mapMarker from "../../images/map-marker.svg";
 
@@ -15,6 +15,7 @@ const mapIcon = leaflet.icon({
     iconUrl: mapMarker,
     iconSize: [58, 68],
     iconAnchor: [29, 68],
+    popupAnchor: [180, 4],
 });
 
 function PlacesMap() {
@@ -46,8 +47,20 @@ function PlacesMap() {
 
                 <Marker
                     icon={mapIcon}
-                    position={[-16.5985097, -49.2773632]}
-                />
+                    position={[-16.6748433, -49.2527972]}
+                >
+                    <Popup
+                        closeButton={false}
+                        minWidth={240}
+                        maxWidth={240}
+                        className="marker-popup"
+                    >
+                        Casa da Esperança
+                        <Link to="">
+                            <FiArrowRight size={24} color="#FFF" />
+                        </Link>
+                    </Popup>
+                </Marker>
             </Map>
 
             <Link to="/" className="add-place">
