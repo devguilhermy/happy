@@ -25,9 +25,7 @@ function PlacesMap() {
                 <header>
                     <img src={logoIcon} alt="" />
                     <h2>Escolha um orfanato no mapa</h2>
-                    <p>
-                        Muitas crianças estão esperando sua visita :)
-                    </p>
+                    <p>Muitas crianças estão esperando sua visita :)</p>
                 </header>
                 <footer>
                     <strong>Goiânia</strong>
@@ -45,10 +43,7 @@ function PlacesMap() {
                     url={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
                 ></TileLayer>
 
-                <Marker
-                    icon={mapIcon}
-                    position={[-16.6748433, -49.2527972]}
-                >
+                <Marker icon={mapIcon} position={[-16.6748433, -49.2527972]}>
                     <Popup
                         closeButton={false}
                         minWidth={240}
@@ -56,14 +51,14 @@ function PlacesMap() {
                         className="marker-popup"
                     >
                         Casa da Esperança
-                        <Link to="">
+                        <Link to="/places/1">
                             <FiArrowRight size={25} color="#FFF" />
                         </Link>
                     </Popup>
                 </Marker>
             </Map>
 
-            <Link to="/" className="add-place">
+            <Link to="/places/new" className="add-place">
                 <FiPlus size={32} color="#fff" />
             </Link>
         </div>
