@@ -1,11 +1,11 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 import Leaflet from "leaflet";
 import { Map, Marker, TileLayer } from "react-leaflet";
 import { FiArrowLeft, FiPlus } from "react-icons/fi";
 
 import mapMarkerImg from "../../images/map-marker.svg";
 import "./styles.css";
+import Sidebar from "../../components/Sidebar";
 
 const happyMapIcon = Leaflet.icon({
     iconUrl: mapMarkerImg,
@@ -16,19 +16,9 @@ const happyMapIcon = Leaflet.icon({
 });
 
 export default function CreatePlace() {
-    const { goBack } = useHistory();
-
     return (
         <div id="page-create-place">
-            <aside>
-                <img src={mapMarkerImg} alt="Happy" />
-
-                <footer>
-                    <button type="button" onClick={goBack}>
-                        <FiArrowLeft size={24} color="#FFF" />
-                    </button>
-                </footer>
-            </aside>
+            <Sidebar></Sidebar>
 
             <main>
                 <form className="create-place-form">
