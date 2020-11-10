@@ -1,13 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Map, TileLayer } from "react-leaflet";
+import { Map, TileLayer, Marker } from "react-leaflet";
+import leaflet from "leaflet";
 
 import { FiPlus } from "react-icons/fi";
-import logoIcon from "../../images/logo-icon.svg";
+import logoIcon from "../../images/logo.svg";
+import mapMarker from "../../images/map-marker.svg";
 
 import "./styles.css";
 import "leaflet/dist/leaflet.css";
-import "dotenv/config"
+import "dotenv/config";
+
+const mapIcon = leaflet.icon({
+    iconUrl: mapMarker,
+    iconSize: [58, 68],
+    iconAnchor: [29, 68],
+});
 
 function PlacesMap() {
     return (
@@ -35,6 +43,11 @@ function PlacesMap() {
                 <TileLayer
                     url={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
                 ></TileLayer>
+
+                <Marker
+                    icon={mapIcon}
+                    position={[-16.5985097, -49.2773632]}
+                />
             </Map>
 
             <Link to="/" className="add-place">
