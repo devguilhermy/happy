@@ -56,6 +56,8 @@ export default {
     },
 
     async create(request: Request, response: Response) {
+        const placesRepo = getRepository(PlaceModel);
+
         // try {
         const {
             name,
@@ -67,6 +69,14 @@ export default {
             longitude,
         } = request.body;
 
+        let real_working_weekends;
+
+        if (working_weekends === "true") {
+            real_working_weekends = true;
+        } else {
+            real_working_weekends = false;
+        }
+
         let images: {}[] = [];
 
         if (request.files) {
@@ -76,14 +86,12 @@ export default {
             });
         }
 
-        const placesRepo = getRepository(PlaceModel);
-
         const data = {
             name,
             about,
             instructions,
             working_hours,
-            working_weekends,
+            working_weekends: real_working_weekends,
             latitude,
             longitude,
             images,
@@ -133,12 +141,10 @@ export default {
         const place = await placesRepo.findOneOrFail(id);
 
         if (!place) {
-            return response
-                .status(400)
-                .json({
-                    message: "There was an error",
-                    error: "There is no place with the identifier provided",
-                });
+            return response.status(400).json({
+                message: "There was an error",
+                error: "There is no place with the identifier provided",
+            });
         }
 
         const {
@@ -151,13 +157,21 @@ export default {
             longitude,
         } = request.body;
 
+        let real_working_weekends;
+
+        if (working_weekends === "true") {
+            real_working_weekends = true;
+        } else {
+            real_working_weekends = false;
+        }
+
         // let images: {}[] = [];
 
         // if (request.files) {
         //     const requestFiles = request.files as Express.Multer.File[];
         //     images = requestFiles.map((file) => {
-        //     return { path: file.filename };
-        // });
+        //         return { path: file.filename };
+        //     });
         // }
 
         const data = {
@@ -165,7 +179,7 @@ export default {
             about,
             instructions,
             working_hours,
-            working_weekends,
+            working_weekends: real_working_weekends,
             latitude,
             longitude,
             // images,

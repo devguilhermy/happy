@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Map, Marker, TileLayer } from "react-leaflet";
 
 import { FaWhatsapp } from "react-icons/fa";
@@ -17,14 +18,28 @@ interface Place {
     working_weekends: boolean;
     latitude: number;
     longitude: number;
+    images: Array<{
+        id: number;
+        url: string;
+    }>;
+}
+
+interface PlaceParams {
+    id: string;
 }
 
 export default function Place() {
+    const params = useParams<PlaceParams>();
+    const { id } = params;
     const [place, setPlace] = useState<Place>();
 
     useEffect(() => {
-        api.get("/places/36").then((response) => {
-            setPlace(response.data.place);
+        api.get(`/places/${id}`).then((response) => {
+            if (response.request.status === 200) {
+                setPlace(response.data.place);
+            } else {
+                console.log(response.data.error);
+            }
         });
     }, []);
 
@@ -38,10 +53,7 @@ export default function Place() {
 
             <main>
                 <div className="orphanage-details">
-                    <img
-                        src="https://www.gcd.com.br/wp-content/uploads/2020/08/safe_image.jpg"
-                        alt={place.name}
-                    />
+                    <img src={place.images[0].url} alt={place.name} />
 
                     <div className="images">
                         <button className="active" type="button">
@@ -50,36 +62,13 @@ export default function Place() {
                                 alt="Lar das meninas"
                             />
                         </button>
-                        <button type="button">
-                            <img
-                                src="https://www.gcd.com.br/wp-content/uploads/2020/08/safe_image.jpg"
-                                alt="Lar das meninas"
-                            />
-                        </button>
-                        <button type="button">
-                            <img
-                                src="https://www.gcd.com.br/wp-content/uploads/2020/08/safe_image.jpg"
-                                alt="Lar das meninas"
-                            />
-                        </button>
-                        <button type="button">
-                            <img
-                                src="https://www.gcd.com.br/wp-content/uploads/2020/08/safe_image.jpg"
-                                alt="Lar das meninas"
-                            />
-                        </button>
-                        <button type="button">
-                            <img
-                                src="https://www.gcd.com.br/wp-content/uploads/2020/08/safe_image.jpg"
-                                alt="Lar das meninas"
-                            />
-                        </button>
-                        <button type="button">
-                            <img
-                                src="https://www.gcd.com.br/wp-content/uploads/2020/08/safe_image.jpg"
-                                alt="Lar das meninas"
-                            />
-                        </button>
+                        {place.images.map((image) => {
+                            return (
+                                <button type="button" key={image.id}>
+                                    <img src={image.url} alt={place.name} />
+                                </button>
+                            );
+                        })}
                     </div>
 
                     <div className="orphanage-details-content">
@@ -117,14 +106,19 @@ export default function Place() {
                                 <FiClock size={32} color="#15B6D6" />
                                 {place.working_hours}
                             </div>
-                            <div className="open-on-weekends">
-                                <FiInfo size={32} color="#39CC83" />
-                                {place.working_weekends
-                                    ? `Atendemos <br />
-                                fim de semana`
-                                    : `Não atendemos <br />
-                                fim de semana`}
-                            </div>
+                            {place.working_weekends ? (
+                                <div className="open-on-weekends">
+                                    <FiInfo size={32} color="#39CC83" />
+                                    Atendemos <br />
+                                    fim de semana
+                                </div>
+                            ) : (
+                                <div className="open-on-weekends not-open">
+                                    <FiInfo size={32} color="#FF669D" />
+                                    Não atendemos <br />
+                                    fim de semana
+                                </div>
+                            )}
                         </div>
 
                         <button type="button" className="contact-button">

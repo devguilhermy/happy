@@ -26,4 +26,4 @@ usar try catch ou error handling do express
 
 Bugs
 
-working weeked n atualiza pra true no update
+working weekend sempre cadastra como false

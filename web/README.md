@@ -10,4 +10,5 @@
 ### **Adicionar**
 
 1. Seletor de layers para o mapa
+2. Tratativa de erro quando não há place com o id informado
 
