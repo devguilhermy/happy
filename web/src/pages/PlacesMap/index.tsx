@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Map, TileLayer, Marker } from "react-leaflet";
 import { Link } from "react-router-dom";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-
-import { FiArrowRight, FiPlus } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 import logoIcon from "../../images/logo.svg";
 
 import "./styles.css";
 import mapMarker from "../../utils/mapMarker";
+import api from "../../services/api";
+import MarkerPopup from "../../components/MarkerPopup";
 
-interface PlaceInterface {
+interface Place {
+    id: number;
     name: string;
     about: string;
     instructions: string;
@@ -24,11 +25,13 @@ interface PlaceInterface {
 }
 
 function PlacesMap() {
-    const [places, setPlaces] = useState([]);
+    const [places, setPlaces] = useState<Place[]>([]);
 
-    axios.get("http://localhost:3333/places").then((response) => {
-        setPlaces(response.data.places);
-    });
+    useEffect(() => {
+        api.get("/places").then((response) => {
+            setPlaces(response.data.places);
+        });
+    }, []);
 
     return (
         <div id="places-map">
@@ -54,23 +57,14 @@ function PlacesMap() {
                     url={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
                 ></TileLayer>
 
-                {places.map((place: PlaceInterface) => {
+                {places.map((place) => {
                     return (
                         <Marker
                             icon={mapMarker}
                             position={[place.latitude, place.longitude]}
+                            key={place.id}
                         >
-                            <Popup
-                                closeButton={false}
-                                minWidth={240}
-                                maxWidth={240}
-                                className="marker-popup"
-                            >
-                                {place.name}
-                                <Link to="/places/1">
-                                    <FiArrowRight size={25} color="#FFF" />
-                                </Link>
-                            </Popup>
+                            <MarkerPopup content={place.name} id={555} />
                         </Marker>
                     );
                 })}

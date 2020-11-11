@@ -66,34 +66,3 @@
 #places-map .add-place:focus {
     background-color: #17d6eb;
 }
-
-#places-map .marker-popup .leaflet-popup-content-wrapper {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 30px;
-}
-
-#places-map .marker-popup .leaflet-popup-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    color: #15c6d6;
-    font-size: 20px;
-    font-weight: bold;
-    margin: 8px 12px;
-}
-
-#places-map .marker-popup .leaflet-popup-content a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    height: 40px;
-    width: 40px;
-    background-color: #15c3d6;
-    border-radius: 50%;
-}
-
-#places-map .marker-popup .leaflet-popup-tip-container {
-    display: none;
-}
