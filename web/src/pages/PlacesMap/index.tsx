@@ -64,7 +64,7 @@ function PlacesMap() {
                             position={[place.latitude, place.longitude]}
                             key={place.id}
                         >
-                            <MarkerPopup content={place.name} id={555} />
+                            <MarkerPopup content={place.name} id={place.id} />
                         </Marker>
                     );
                 })}

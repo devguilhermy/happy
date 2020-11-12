@@ -32,7 +32,7 @@ export default function Place() {
     const params = useParams<PlaceParams>();
     const { id } = params;
     const [place, setPlace] = useState<Place>();
-    // const [banner, setBanner] = useState(0);
+    const [bannerIndex, setBannerIndex] = useState(0);
 
     useEffect(() => {
         api.get(`/places/${id}`).then((response) => {
@@ -54,12 +54,21 @@ export default function Place() {
 
             <main>
                 <div className="orphanage-details">
-                    <img src={place.images[0].url} alt={place.name} />
+                    <img src={place.images[bannerIndex].url} alt={place.name} />
 
                     <div className="images">
-                        {place.images.map((image) => {
+                        {place.images.map((image, index) => {
                             return (
-                                <button type="button" key={image.id}>
+                                <button
+                                    type="button"
+                                    key={image.id}
+                                    onClick={() => {
+                                        setBannerIndex(index);
+                                    }}
+                                    className={
+                                        bannerIndex === index ? "active" : ""
+                                    }
+                                >
                                     <img src={image.url} alt={place.name} />
                                 </button>
                             );
