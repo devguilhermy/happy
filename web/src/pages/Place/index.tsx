@@ -32,6 +32,7 @@ export default function Place() {
     const params = useParams<PlaceParams>();
     const { id } = params;
     const [place, setPlace] = useState<Place>();
+    // const [banner, setBanner] = useState(0);
 
     useEffect(() => {
         api.get(`/places/${id}`).then((response) => {
@@ -56,12 +57,6 @@ export default function Place() {
                     <img src={place.images[0].url} alt={place.name} />
 
                     <div className="images">
-                        <button className="active" type="button">
-                            <img
-                                src="https://www.gcd.com.br/wp-content/uploads/2020/08/safe_image.jpg"
-                                alt="Lar das meninas"
-                            />
-                        </button>
                         {place.images.map((image) => {
                             return (
                                 <button type="button" key={image.id}>
@@ -92,7 +87,13 @@ export default function Place() {
                             </Map>
 
                             <footer>
-                                <a href="#">Ver rotas no Google Maps</a>
+                                <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={`https://www.google.com/maps/dir/?api=1&destination=${place.latitude},${place.longitude}`}
+                                >
+                                    Ver rotas no Google Maps
+                                </a>
                             </footer>
                         </div>
 
